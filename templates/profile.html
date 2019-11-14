@@ -1,0 +1,90 @@
+{% include "header.html" %}
+
+<h3 class="h3">Profile </h3> 
+{% with messages = get_flashed_messages() %}
+  {% if messages %}
+   
+    {% for message in messages %}     
+      <div class="alert alert-success alert-dismissible fade show" role="alert">
+        {{ message }}
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+    {% endfor %}
+  
+  {% endif %}
+{% endwith %}
+{% block body %}{% endblock %}
+
+<div class="row">
+    
+    
+  <div class="col-4">
+    <div class="list-group" id="list-tab" role="tablist">
+      <a class="list-group-item list-group-item-action active" id="list-home-list" data-toggle="list" href="#list-home" role="tab" aria-controls="home">Home</a>
+      <a class="list-group-item list-group-item-action" id="list-apikey-list" data-toggle="list" href="#list-apikey" role="tab" aria-controls="apikey">API Key</a>
+      <a class="list-group-item list-group-item-action" id="list-usage-list" data-toggle="list" href="#list-usage" role="tab" aria-controls="usage">API Usage</a>
+      <a class="list-group-item list-group-item-action" id="list-settings-list" data-toggle="list" href="#list-settings" role="tab" aria-controls="settings">Settings</a>
+    </div>
+  </div>
+
+  <div class="col-8">
+    <div class="tab-content" id="nav-tabContent">
+      <div class="tab-pane fade show active" id="list-home" role="tabpanel" aria-labelledby="list-home-list">
+        <p>User Name <b>{{ user.fullname }}</b></p>
+        <p>Email <b>{{ user.email }}</b></p>
+        <p>Join Date <b>{{ user.gauth }}</b></p>
+      </div>
+      <div class="tab-pane fade" id="list-apikey" role="tabpanel" aria-labelledby="list-apikey-list">
+        <p>This is your API Key &nbsp; <b id="apikey">{{ user.apikey }}</b></p>
+        <p>You can use it to get data using our API</p>
+      </div>
+      <div class="tab-pane fade" id="list-usage" role="tabpanel" aria-labelledby="list-usage-list">
+        <p>
+            <b>Common usage</b>
+            <pre>http://localhost:5000/api/<request>?key=&lt;YOUR API KEY&gt;</pre><br>
+            <span>Success</span> returns a json object<br>
+            <span>Failure</span> Not a valid user in case of wrong API KEY<br>
+            <code>
+            {
+                "code": "404", 
+                "result": "Not a valid user"
+            }
+            </code>
+        </p>
+        <hr>
+        <p>
+            <b>Get All Products end point</b>
+            <pre>http://localhost:5000/api/getProducts?key=&lt;YOUR API KEY&gt;</pre><br>
+            <span>Success</span> returns the json of all the products added by you<br>
+            <span>Failure</span> json with no products<br>
+        </p>
+        <hr>
+        <p>
+            <b>Get All Categories end point</b>
+            <pre>http://localhost:5000/api/getCategories?key=&lt;YOUR API KEY&gt;</pre><br>
+            <span>Success</span> returns the json of all the products added by you<br>
+            <span>Failure</span> json with no products<br>
+        </p>
+      </div>
+      <div class="tab-pane fade" id="list-settings" role="tabpanel" aria-labelledby="list-settings-list">...</div>
+    </div>
+  </div>
+
+
+
+</div>
+<hr>
+
+<script>
+$(function () {    
+    $("#copy").on("click", function(){
+        var apikey=$("#apikey").text();
+        apikey.select();
+        alert(apikey)
+        document.execCommand("copy");
+    });
+})
+</script>
+{% include "footer.html" %}

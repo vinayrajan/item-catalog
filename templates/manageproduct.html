@@ -1,0 +1,89 @@
+{% include "header.html" %}
+
+<h3 class="h3">Products <span class="pull-right"><a href="{{ url_for('newProduct') }}" class="btn btn-success btn-sm"><i class="fa fa-pencil"></i>&nbsp;Add New</a></span></h3> 
+{% with messages = get_flashed_messages() %}
+  {% if messages %}
+   
+    {% for message in messages %}     
+      <div class="alert alert-success alert-dismissible fade show" role="alert">
+        {{ message }}
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+    {% endfor %}
+  
+  {% endif %}
+{% endwith %}
+{% block body %}{% endblock %}
+
+<div class="row">
+    
+    {% if products.count()>0 %}
+    <table class="table table-bordered">
+        <thead class="thead-dark">
+        <tr>
+            <td>ID</td>
+            <td>Product Title</td>
+            <td>Price</td>
+            <td>Category</td>
+            <td>Image 1</td>
+            <td>Image 2</td>
+            <td>Actions</td>        
+            
+        </tr>
+        </thead>
+        <tbody>              
+        {% for p in products: %}
+            <tr>
+                <td>{{ p[0].id }}</td>
+                <td>{{ p[0].title }}</td>
+                <td>${{ p[0].price }}</td>
+                <td>{{ p[1].category }}</td>
+                <td><img src="{{ p[0].pic1 }}" class="img-thumbnail" style="max-width: 100px;"></td>
+                <td><img src="{{ p[0].pic2 }}" class="img-thumbnail" style="max-width: 100px;" ></td>
+                <td>
+                   <a data-toggle="tooltip" title="Edit this Product " type="button" class="btne btn btn-primary btn-sm" href="http://localhost:5000/editProduct/{{ p[0].title | urlencode }}-{{ p[0].id }}.html"><i class="fa fa-pencil"></i></a>
+                   <button data-toggle="tooltip" title="Delete this Product " type="button" class="btnd btn btn-danger btn-sm" data-id="{{p[0].id}}" data-name="{{p[0].title}}"><i class="fa fa-trash"></i> </button>
+                </td>        
+            </tr>
+         {% endfor %}   
+        </tbody>
+    </table>
+    {% else %}
+       <div class="text-center" style="width: 90%;">Looks like you have not added any products to your catalog, Please add new product by clicking on the add new button</div>
+    {% endif %}
+
+</div>
+<hr>
+
+<script>
+$(function () {
+    
+
+    $(".btnd").on('click',function(){
+        var id=$(this).data('id');
+        var name=$(this).data('name'); 
+
+        var url="{{ url_for('manageProducts') }}";
+       yesno=confirm("Are you sure to delete this product : "+ name);
+       if(yesno== true){
+        $.ajax({
+            url:url,
+            data: { prodtitle: name, prodid: id },
+            method:"DELETE", 
+            success:function(data){ 
+                alert(data);
+                location.reload(); 
+            }                      
+        }); 
+       }
+        
+
+    });
+    
+
+
+})
+</script>
+{% include "footer.html" %}

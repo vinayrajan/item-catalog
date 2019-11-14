@@ -1,0 +1,39 @@
+
+
+	{% include "header.html" %}
+		   <h3 class="h3"><!--Products listed under {{name}} -->&nbsp;</h3> 
+    <div class="row">
+       
+        {% for p in products %}
+            <div class="col-md-3 col-sm-6">
+                    <div class="product-grid">
+                        <div class="product-image">
+                            <a href="#">
+                                <img class="pic-1" src="{{ p.pic1 }}">
+                                <img class="pic-2" src="{{ p.pic2 }}">
+                            </a>
+                        
+                            <span class="product-new-label">Sale</span>
+                            <span class="product-discount-label">20%</span>
+                        </div>
+                        <ul class="rating">{{ p.rating }}
+                            <li class="fa fa-star"></li>
+                            <li class="fa fa-star"></li>
+                            <li class="fa fa-star"></li>
+                            <li class="fa fa-star"></li>
+                            <li class="fa fa-star disable"></li>
+                        </ul>
+                        <div class="product-content">
+                            <h3 class="title"><a href="#">{{ p.title }}</a></h3>
+                            <div class="price">${{ p.price }}
+                                <span>${{ p.price }}</span>
+                            </div>
+                            <a class="add-to-cart" href="{{url_for('showProduct', title=p.title, prod_id=p.id)}}">View this Product</a>
+                        </div>
+                    </div>
+                </div>
+        {% endfor %}    
+            
+    </div>
+<hr>
+{% include "footer.html" %}

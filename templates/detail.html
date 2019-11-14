@@ -1,0 +1,46 @@
+
+
+	{% include "header.html" %}
+		
+    <h3 class="h3">{{ product.title }}</h3>   
+    
+    <div class="row">
+
+        <div class="col-md-4">
+        <img class="img-fluid" src="{{ product.pic1 }}" alt="">
+        </div>
+        <div class="col-md-4">
+        <img class="img-fluid" src="{{ product.pic2 }}" alt="">
+        </div>
+
+        <div class="col-md-4">
+        <h3 class="my-3">Description</h3>
+        <p>{{ product.description }}</p>
+        <h3 class="my-3">Details</h3>
+        <ul>
+            <li>Price: ${{ product.price }}</li>
+            <li>Discount: 20%</li>
+            <li>Quantity: 20 peices</li>
+            <li>Ratings: {{ product.rating }}</li>
+        </ul>
+        </div>
+
+    </div>
+
+    <!-- Related Projects Row -->
+    {% if related | length > 1 %}
+  <h3 class="my-4">Other options to look at</h3>
+  <div class="row">
+    {% for r in related %}
+        <div class="col-md-3 col-sm-6 mb-4">
+        <a href="{{url_for('showProduct', title=r.title, prod_id=r.id)}}">
+            <img class="img-fluid" src="{{r.pic1}}" alt="">
+        </a>
+        {{r.title}}
+        </div>
+    {% endfor %}        
+  </div>
+    {% endif %}
+
+<hr>
+{% include "footer.html" %}

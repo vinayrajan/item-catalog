@@ -1,0 +1,131 @@
+{% include "header.html" %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.1/jquery.validate.js"></script>
+<h3 class="h3">New Product <span class="pull-right"><a href="{{ url_for('manageProducts') }}" class="btn btn-success btn-sm"><i class="fa fa-undo" aria-hidden="true"></i>
+ &nbsp;Back</a></span></h3> 
+
+<div id="newprod">
+    <form id="product-form" name="product-form" method="POST" action="{{url_for('newProduct')}}" class="needs-validation" novalidate>
+    <div class="row">   
+        <div class="col-md-4">      
+            <div class="form-group">                
+                <label for="prodtitle">Product Title</label>
+                <input type="text" value="{% if product %}{{product.title}}{% endif %}" class="form-control" id="prodtitle" name="prodtitle" aria-describedby="prodtitle" placeholder="Name your Product" required>
+                <small id="prodtitleHelp" class="form-text text-muted">Enter the product name in the text box.</small>
+                
+                <div class="valid-feedback">Looks good!</div>
+                <div class="invalid-feedback">Please enter a valid product Name</div>
+
+                <input type="hidden" id="prodid" name="prodid" value="{{product.id}}">                
+                <input type="hidden" id="createdby" name="createdby" value="{{session['user_id'] }}">
+
+            </div>
+            
+            <div class="form-group">            
+                <label for="proddesc">Product Description</label>
+                <textarea type="text" class="form-control" id="proddesc" name="proddesc" aria-describedby="proddesc" placeholder="Describe your Product">{% if product %}{{product.description}}{% endif %}</textarea>
+                <small id="proddescHelp" class="form-text text-muted">Enter the product Description in the text box.</small>
+                
+                <div class="valid-feedback">Looks good!</div>
+                <div class="invalid-feedback">Please enter a valid product Description</div>
+            </div>
+        </div>
+        <div class="col-md-4">   
+            <div class="form-group">            
+                <label for="prodpic1">Product Picture 1</label>
+                <input type="text" value="{% if product %}{{product.pic1}}{% endif %}" class="form-control" id="prodpic1" name="prodpic1" aria-describedby="prodpic1" placeholder="Describe your Product">
+                <small id="prodpic1Help" class="form-text text-muted">Enter the product pic1 in the text box.</small>
+                
+                <div class="valid-feedback">Looks good!</div>
+                <div class="invalid-feedback">Please enter a valid product picture</div>
+            </div>  
+            <div class="form-group">            
+                <label for="prodcat">Product Category</label>
+                 
+                <select class="form-control" id="prodcat" name="prodcat" aria-describedby="prodcat" placeholder="Categorize your Product">
+                 {% for c in menu_categories %}
+                    <option value="{{ c.id }}" {% if product and  c.id==product.cat %}selected="selected"{% endif %} class="dropdown-item">{{ c.category }}</option>
+                 {% endfor %}  
+                 </select>
+                <small id="prodcatHelp" class="form-text text-muted">Select the product category in the text box.</small>
+                
+                <div class="valid-feedback">Looks good!</div>
+                <div class="invalid-feedback">Please select a valid product category</div>
+            </div> 
+            
+        </div>
+        <div class="col-md-4">   
+             <div class="form-group">            
+                <label for="prodpic2">Product Picture 2</label>
+                <input type="text" value="{% if product %}{{product.pic2}}{% endif %}" class="form-control" id="prodpic2" name="prodpic2" aria-describedby="prodpic2" placeholder="Describe your Product">
+                <small id="prodpic2Help" class="form-text text-muted">Enter the product pic2 in the text box.</small>
+                
+                <div class="valid-feedback">Looks good!</div>
+                <div class="invalid-feedback">Please enter a valid product picture</div>
+            </div>  
+            <div class="form-group">            
+                <label for="prodprice">Product Price</label>                
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">$</span>
+                    </div>                    
+                    <input type="text" value="{% if product %}{{product.price}}{% endif %}" class="form-control" id="prodprice" name="prodprice" aria-describedby="prodprice" style="width:60px" placeholder="Price your Product" number>                    
+                </div>
+                <small id="prodpriceHelp" class="form-text text-muted">Enter the product price in the text box.</small>
+                
+                <div class="valid-feedback">Looks good!</div>
+                <div class="invalid-feedback">Please enter a valid product price</div>
+            </div>   
+        </div>
+    </div>
+    <div class="row">
+        <div class="form-group">
+             <button id="btnnc" type="submit" class="btn btn-primary">Submit</button>
+        </div>
+    </div>
+    </form>
+</div>
+<hr>
+
+<script>
+$(document).ready(function () {
+
+    $('#product-form').validate({
+        rules: {
+            prodtitle: {
+                required: true,
+                minlength: 5,
+            },
+            prodprice: {
+                minlength: 1,               
+                required: true,
+                number: true
+            },
+            proddesc: {
+                required: true,
+                minlength: 5,
+            },
+            prodpic1: {
+                required: true,
+                minlength: 5,
+            },
+            prodpic2: {
+                required: true,
+                minlength: 5,
+            },
+            
+        },
+        highlight: function (element) {
+            $(element).closest('.form-control').removeClass('valid').addClass('is-invalid');
+        },
+        success: function (element) {
+            element.text('OK!').addClass('valid').closest('.form-control').removeClass('is-invalid').addClass('valid');
+        }
+    });
+
+
+
+});
+</script>
+{% include "footer.html" %}
+
+

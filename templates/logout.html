@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js" type="text/javascript"></script>    
+<meta name="google-signin-client_id" content="608228376227-mm02pp8umrjqicpq6et1m2rn79nbim32.apps.googleusercontent.com">                                              
+
+<script type="text/javascript">
+$(document).ready(function(){
+
+    gapi.load('auth2', function() {
+        gapi.auth2.init();
+    });
+    
+    var auth2 = gapi.auth2.getAuthInstance();
+    auth2.signOut().then(function () {
+        console.log('User signed out.');
+    });
+    var x=getCookie('gtoken');
+    console.log(x)
+    console.log('User signed out. redirecting ... ');
+    setTimeout(function(){
+        window.location.href = "http://localhost:5000/";
+    }, 4000);
+    
+
+});
+
+function getCookie(cname) {
+    var name = cname + "=";
+    var decodedCookie = decodeURIComponent(document.cookie);
+    var ca = decodedCookie.split(';');
+    for(var i = 0; i <ca.length; i++) {
+        var c = ca[i];
+        while (c.charAt(0) == ' ') {
+        c = c.substring(1);
+        }
+        if (c.indexOf(name) == 0) {
+        return c.substring(name.length, c.length);
+        }
+    }
+    return "";
+}
+
+function eraseCookie(name) {   
+    document.cookie = name+'=; Max-Age=-99999999;';  
+}
+</script>
+</head>
+<body>
+...
+<script src="https://apis.google.com/js/platform.js"></script>
+</body>
+</html>
