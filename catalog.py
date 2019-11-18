@@ -1,3 +1,5 @@
+#!/usr/bin/python
+
 import os, random, string, datetime, json, httplib2, requests
 import urllib.parse
 from datetime import date
