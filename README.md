@@ -104,7 +104,7 @@ The new product requires
 #### Profile
 > Only for the logged in users
 
-1.  The profile page shows the information about the logged in user.
+1. The profile page shows the information about the logged in user.
 2. The API Key section gives you the API key that can be used to get data from  API in the JSON format
 3. The  API Usage section provides the help to use the API. It includes the common success and failure messages.
 4. The settings section is right now blank.

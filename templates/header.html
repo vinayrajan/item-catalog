@@ -4,8 +4,8 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   
-    <title>CataCart</title>
-	<!-- Bootstrap CSS -->    
+    <title>CataCart | {{pagetitle}}</title>
+	<!-- Bootstrap CSS -->
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js" type="text/javascript"></script>    
 	<link href="http://maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">	
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
@@ -16,62 +16,62 @@
 </head>
 <body>
 <div class="container">
-<header>
-	<nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <a class="navbar-brand" href="#">Cata<i class="fa fa-shopping-cart" aria-hidden="true"></i>Cart </a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
+    <header>
+	    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <a class="navbar-brand" href="#">Cata<i class="fa fa-shopping-cart" aria-hidden="true"></i>Cart </a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
 
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav mr-auto">
-            <li class="nav-item active">
-                <a class="nav-link" href="{{url_for('showHome')}}">Home <span class="sr-only">(current)</span></a>
-            </li>
-            <!-- 
-            <li class="nav-item">
-                <a class="nav-link" href="#">Categories</a>
-            </li>
-            -->
-            
-            <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                Categories
-                </a>
-                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                {% for c in menu_categories %}
-                    <a href="http://localhost:5000/category/{{ c.category | urlencode }}-{{ c.id }}.html" class="dropdown-item">{{ c.category }}</a>
-                {% endfor %}                
-                <div class="dropdown-divider"></div>
-                <a class="dropdown-item" href="{{url_for('showHome')}}">All Categories</a>
-                </div>
-            </li>
-            
-            
-            </ul>                
-            {% if 'isuser' not in user_session and session['isuser'] != True %}
-            <a id="loginbutton" type="button" class="btn btn-primary" href="{{url_for('showLogin')}}"  >
-                <i class="fa fa-sign-in" aria-hidden="true"></i>&nbsp;Login
-            </a>                
-            {% endif %}
-            {% if session['isuser'] == True %}
-            <div id="welcometext" class="col-md-6" style="display:contents" href="#" >
-                <span class="d-inline-block">Welcome user!</span>
-                <ul class="navbar-nav mr-auto" class="d-inline-block">
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav mr-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" href="{{url_for('showHome')}}">Home <span class="sr-only">(current)</span></a>
+                </li>
+                <!--
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Categories</a>
+                </li>
+                -->
+
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Administration</a>
-                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">                
-                        <a href="{{url_for('showprofile')}}" class="dropdown-item"><i class="fa fa-user" aria-hidden="true"></i> &nbsp; Profile</a>
-                        <a href="{{url_for('manageCategories')}}" class="dropdown-item"><i class="fa fa-sitemap" aria-hidden="true"></i> &nbsp; Manage Category</a>
-                        <a href="{{url_for('manageProducts')}}" class="dropdown-item"><i class="fa fa-product-hunt" aria-hidden="true"></i> &nbsp; Manage Products</a>                 
-                        <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="{{url_for('logout')}}"><i class="fa fa-sign-out" aria-hidden="true"></i> &nbsp; Logout</a>
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Categories
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    {% for c in menu_categories %}
+                        <a href="http://localhost:5000/category/{{ c.category | urlencode }}-{{ c.id }}.html" class="dropdown-item">{{ c.category }}</a>
+                    {% endfor %}
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" href="{{url_for('showHome')}}">All Categories</a>
                     </div>
                 </li>
+
+
                 </ul>
-            </div>               
-            {% endif %}
-        </div>
+                {% if 'isuser' not in user_session and session['isuser'] != True %}
+                <a id="loginbutton" type="button" class="btn btn-primary" href="{{url_for('showLogin')}}"  >
+                    <i class="fa fa-sign-in" aria-hidden="true"></i>&nbsp;Login
+                </a>
+                {% endif %}
+                {% if session['isuser'] == True %}
+                <div id="welcometext" class="col-md-6" >
+                    <span class="d-inline-block">Welcome user!</span>
+                    <ul class="navbar-nav mr-auto d-inline-block">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown1" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Administration</a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <a href="{{url_for('showprofile')}}" class="dropdown-item"><i class="fa fa-user" aria-hidden="true"></i> &nbsp; Profile</a>
+                            <a href="{{url_for('manageCategories')}}" class="dropdown-item"><i class="fa fa-sitemap" aria-hidden="true"></i> &nbsp; Manage Category</a>
+                            <a href="{{url_for('manageProducts')}}" class="dropdown-item"><i class="fa fa-product-hunt" aria-hidden="true"></i> &nbsp; Manage Products</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="{{url_for('logout')}}"><i class="fa fa-sign-out" aria-hidden="true"></i> &nbsp; Logout</a>
+                        </div>
+                    </li>
+                    </ul>
+                </div>
+                {% endif %}
+            </div>
         </nav>
 
 	</header>

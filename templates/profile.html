@@ -25,7 +25,7 @@
       <a class="list-group-item list-group-item-action active" id="list-home-list" data-toggle="list" href="#list-home" role="tab" aria-controls="home">Home</a>
       <a class="list-group-item list-group-item-action" id="list-apikey-list" data-toggle="list" href="#list-apikey" role="tab" aria-controls="apikey">API Key</a>
       <a class="list-group-item list-group-item-action" id="list-usage-list" data-toggle="list" href="#list-usage" role="tab" aria-controls="usage">API Usage</a>
-      <a class="list-group-item list-group-item-action" id="list-settings-list" data-toggle="list" href="#list-settings" role="tab" aria-controls="settings">Settings</a>
+      <!-- <a class="list-group-item list-group-item-action" id="list-settings-list" data-toggle="list" href="#list-settings" role="tab" aria-controls="settings">Settings</a> -->
     </div>
   </div>
 
@@ -43,7 +43,7 @@
       <div class="tab-pane fade" id="list-usage" role="tabpanel" aria-labelledby="list-usage-list">
         <p>
             <b>Common usage</b>
-            <pre>http://localhost:5000/api/<request>?key=&lt;YOUR API KEY&gt;</pre><br>
+            <pre>http://localhost:5000/api/&lt;request&gt;?key=&lt;YOUR API KEY&gt;</pre><br>
             <span>Success</span> returns a json object<br>
             <span>Failure</span> Not a valid user in case of wrong API KEY<br>
             <code>
@@ -68,7 +68,7 @@
             <span>Failure</span> json with no products<br>
         </p>
       </div>
-      <div class="tab-pane fade" id="list-settings" role="tabpanel" aria-labelledby="list-settings-list">...</div>
+      <!--<div class="tab-pane fade" id="list-settings" role="tabpanel" aria-labelledby="list-settings-list">...</div>-->
     </div>
   </div>
 
@@ -76,15 +76,4 @@
 
 </div>
 <hr>
-
-<script>
-$(function () {    
-    $("#copy").on("click", function(){
-        var apikey=$("#apikey").text();
-        apikey.select();
-        alert(apikey)
-        document.execCommand("copy");
-    });
-})
-</script>
 {% include "footer.html" %}

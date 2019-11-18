@@ -7,7 +7,7 @@
 
 <script type="text/javascript">
 $(document).ready(function(){
-
+    var homeurl="{{ url_for('showHome') }}";
     gapi.load('auth2', function() {
         gapi.auth2.init();
     });
@@ -20,7 +20,7 @@ $(document).ready(function(){
     console.log(x)
     console.log('User signed out. redirecting ... ');
     setTimeout(function(){
-        window.location.href = "http://localhost:5000/";
+        window.location.href = homeurl;
     }, 4000);
     
 

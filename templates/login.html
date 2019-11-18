@@ -59,6 +59,7 @@ $(document).ready(function(){
 		console.log("ID Token: " + id_token);
 
 		var url="{{ url_for('doGLogin') }}";
+		var homeurl="{{ url_for('showHome') }}";
 		var data={"id":id,"name":name,"email":email,"token":id_token,"code":code,"picture":pic};
 
 		
@@ -71,7 +72,7 @@ $(document).ready(function(){
 				setCookie("gtoken",id_token,1);
 				$('#result').html('Google Login Successful!<br>' + '<br>Redirecting...');
 				setTimeout(function(){
-					window.location.href = "http://localhost:5000/";
+					window.location.href = homeurl;
 				}, 4000);
 			},
 			
