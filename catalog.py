@@ -23,7 +23,7 @@ import dbsetup
 # from oauth2client.client import FlowExchangeError
 
 # init new flask app
-app = Flask(__name__)
+application = Flask(__name__)
 CLIENT_ID = json.loads(open('client_secrets.json', 'r').read())['web']['client_id']
 
 # Database connection
@@ -35,7 +35,7 @@ session = DBSession()
 
 
 # App routes
-@app.route('/')
+@application.route('/')
 def showHome():
     title = " Welcome to Catacart."
     categories = session.query(dbsetup.Category).order_by(asc(dbsetup.Category.category))
@@ -43,7 +43,7 @@ def showHome():
     return render_template('index.html', menu_categories=categories, pagetitle=title, products=products)
 
 
-@app.route('/product-detail/<path:title>-<path:prod_id>.html')
+@application.route('/product-detail/<path:title>-<path:prod_id>.html')
 def showProduct(prod_id, title=None):
     global rp, cat
     categories = session.query(dbsetup.Category).order_by(asc(dbsetup.Category.category))
@@ -60,7 +60,7 @@ def showProduct(prod_id, title=None):
     return render_template('detail.html', menu_categories=categories, pagetitle=title, product=rp, related=cat_products)
 
 
-@app.route('/category/<path:name>-<path:id>.html')
+@application.route('/category/<path:name>-<path:id>.html')
 def showCatalog(id, name=None):
     title = name
     categories = session.query(dbsetup.Category).order_by(asc(dbsetup.Category.category))
@@ -71,13 +71,13 @@ def showCatalog(id, name=None):
                            products=cat_products)
 
 
-@app.route('/login.html')
+@application.route('/login.html')
 def showLogin():
     categories = session.query(dbsetup.Category).order_by(asc(dbsetup.Category.category))
     return render_template('login.html', pagetitle="Login Page", menu_categories=categories)
 
 
-@app.route('/doGLogin', methods=['GET', 'POST'])
+@application.route('/doGLogin', methods=['GET', 'POST'])
 def doGLogin():
     if request.method == 'GET':
         # get posted data from Google
@@ -133,7 +133,7 @@ def authorize(us):
     return x
 
 
-@app.route("/logout.html")
+@application.route("/logout.html")
 def logout():
     user_session.pop('isuser', None)
     user_session.pop('user_id')
@@ -142,7 +142,7 @@ def logout():
 
 # restricted to loged in users
 
-@app.route("/profile.html", methods=['GET', 'POST'])
+@application.route("/profile.html", methods=['GET', 'POST'])
 @authorize
 def showprofile():
     userdetail = session.query(dbsetup.Users).filter_by(uid=user_session['user_id']).one()
@@ -150,7 +150,7 @@ def showprofile():
     return render_template('profile.html',  pagetitle="Profile and Help",menu_categories=categories, user=userdetail)
 
 
-@app.route("/managecategories.html", methods=['GET', 'POST', 'PUT', 'DELETE'])
+@application.route("/managecategories.html", methods=['GET', 'POST', 'PUT', 'DELETE'])
 @authorize
 def manageCategories():
     if request.method == 'GET':
@@ -195,7 +195,7 @@ def manageCategories():
         return "updated"
 
 
-@app.route("/manageproducts.html", methods=['GET', 'DELETE'])
+@application.route("/manageproducts.html", methods=['GET', 'DELETE'])
 @authorize
 def manageProducts():
     if request.method == 'GET':
@@ -216,8 +216,8 @@ def manageProducts():
         return "The Product called " + title + " is Deleted"
 
 
-@app.route("/newproduct.html", methods=['GET', 'POST'])
-@app.route("/editProduct/<path:name>-<path:id>.html", methods=['GET', 'POST'])
+@application.route("/newproduct.html", methods=['GET', 'POST'])
+@application.route("/editProduct/<path:name>-<path:id>.html", methods=['GET', 'POST'])
 @authorize
 def newProduct(id=None, name=None):
     if request.method == 'GET':
@@ -274,7 +274,7 @@ def newProduct(id=None, name=None):
 
 
 # API
-@app.route("/api/<path:api>", methods=['GET', 'POST', 'DELETE'])
+@application.route("/api/<path:api>", methods=['GET', 'POST', 'DELETE'])
 def api(api=None):
     # print(api)
     # print(request.args['key'])
@@ -317,19 +317,19 @@ def as_dict(self):
     return {c.name: getattr(self, c.name) for c in self.__table__.columns}
 
 
-@app.route("/products/json")
+@application.route("/products/json")
 def allproductjson():
     items = session.query(dbsetup.Products).order_by(asc(dbsetup.Products.id))
     return jsonify(Products=[i.serialize for i in items])
 
 
-@app.route("/categories/json")
+@application.route("/categories/json")
 def allcategoriesjson():
     items = session.query(dbsetup.Category).order_by(asc(dbsetup.Category.id))
     return jsonify(Category=[i.serialize for i in items])
 
 
-@app.route("/product/<int:product_id>/json")
+@application.route("/product/<int:product_id>/json")
 def oneproductjson(product_id):
     # product_id = request.args['product_id']
     items = session.query(dbsetup.Products) \
@@ -338,7 +338,7 @@ def oneproductjson(product_id):
     return jsonify(Products=[i.serialize for i in items])
 
 
-@app.route("/category/<int:category_id>/json")
+@application.route("/category/<int:category_id>/json")
 def onecategoryjson(category_id):
     # category_id = request.args['category_id']
     items = session.query(dbsetup.Category).filter_by(id=category_id).order_by(asc(dbsetup.Category.id))
@@ -347,6 +347,7 @@ def onecategoryjson(category_id):
 
 # declaring a main function
 if __name__ == '__main__':
-    app.debug = True
-    app.secret_key = 'secretkey'
-    app.run(host='127.0.0.1', port=5000)
+    # application.debug = True
+    # application.secret_key = 'secretkey'
+    # application.run(host='127.0.0.1', port=5000)
+    application.run(host='0.0.0.0')
