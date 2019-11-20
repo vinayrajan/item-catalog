@@ -37,10 +37,10 @@ session = DBSession()
 # App routes
 @app.route('/')
 def showHome():
-    title=" Welcome to Catacart."
+    title = " Welcome to Catacart."
     categories = session.query(dbsetup.Category).order_by(asc(dbsetup.Category.category))
     products = session.query(dbsetup.Products).order_by(desc(dbsetup.Products.id))
-    return render_template('index.html', menu_categories=categories,pagetitle=title, products=products)
+    return render_template('index.html', menu_categories=categories, pagetitle=title, products=products)
 
 
 @app.route('/product-detail/<path:title>-<path:prod_id>.html')
@@ -53,19 +53,22 @@ def showProduct(prod_id, title=None):
     for rp in result_product:
         cat = rp[5]
         # cat_products = session.query(Products).filter(cat==cat ).order_by(desc(Products.id)).limit(3)
-    cat_products = session.query(dbsetup.Products)\
-        .filter(dbsetup.Products.cat == cat)\
-        .filter(dbsetup.Products.id != prod_id)\
+    cat_products = session.query(dbsetup.Products) \
+        .filter(dbsetup.Products.cat == cat) \
+        .filter(dbsetup.Products.id != prod_id) \
         .order_by(desc(dbsetup.Products.id)).all()
     return render_template('detail.html', menu_categories=categories, pagetitle=title, product=rp, related=cat_products)
 
 
 @app.route('/category/<path:name>-<path:id>.html')
-def showCatalog(id,name=None):
-    title=name
+def showCatalog(id, name=None):
+    title = name
     categories = session.query(dbsetup.Category).order_by(asc(dbsetup.Category.category))
-    cat_products = session.query(dbsetup.Products).filter(dbsetup.Products.cat == id).order_by(desc(dbsetup.Products.id)).all()
-    return render_template('category.html', menu_categories=categories, pagetitle=title, name=name, products=cat_products)
+    cat_products = session.query(dbsetup.Products) \
+        .filter(dbsetup.Products.cat == id) \
+        .order_by(desc(dbsetup.Products.id)).all()
+    return render_template('category.html', menu_categories=categories, pagetitle=title, name=name,
+                           products=cat_products)
 
 
 @app.route('/login.html')
@@ -144,7 +147,7 @@ def logout():
 def showprofile():
     userdetail = session.query(dbsetup.Users).filter_by(uid=user_session['user_id']).one()
     categories = session.query(dbsetup.Category).order_by(asc(dbsetup.Category.category))
-    return render_template('profile.html', menu_categories=categories, user=userdetail)
+    return render_template('profile.html',  pagetitle="Profile and Help",menu_categories=categories, user=userdetail)
 
 
 @app.route("/managecategories.html", methods=['GET', 'POST', 'PUT', 'DELETE'])
@@ -152,7 +155,7 @@ def showprofile():
 def manageCategories():
     if request.method == 'GET':
         categories = session.query(dbsetup.Category).order_by(asc(dbsetup.Category.category))
-        return render_template('managecategory.html', menu_categories=categories, categories=categories)
+        return render_template('managecategory.html', pagetitle="Manage Categories", menu_categories=categories, categories=categories)
     if request.method == 'POST':
         # new category
         newCategory = dbsetup.Category(
@@ -197,9 +200,11 @@ def manageCategories():
 def manageProducts():
     if request.method == 'GET':
         categories = session.query(dbsetup.Category).order_by(asc(dbsetup.Category.category))
-        products = session.query(dbsetup.Products, dbsetup.Category).join(dbsetup.Category).filter_by(
-            created_by=user_session['user_id']).order_by(asc(dbsetup.Products.id))
-        return render_template('manageproduct.html', menu_categories=categories, products=products)
+        products = session.query(dbsetup.Products, dbsetup.Category) \
+            .join(dbsetup.Category) \
+            .filter_by(created_by=user_session['user_id']) \
+            .order_by(asc(dbsetup.Products.id))
+        return render_template('manageproduct.html', pagetitle="Manage Products", menu_categories=categories, products=products)
 
     if request.method == 'DELETE':
         id = request.form['prodid']
@@ -220,10 +225,10 @@ def newProduct(id=None, name=None):
 
             categories = session.query(dbsetup.Category).order_by(asc(dbsetup.Category.category))
             product = session.query(dbsetup.Products).filter_by(id=id).one()
-            return render_template('newproduct.html', menu_categories=categories, product=product)
+            return render_template('newproduct.html',pagetitle="Add a new Product", menu_categories=categories, product=product)
         else:
             categories = session.query(dbsetup.Category).order_by(asc(dbsetup.Category.category))
-            return render_template('newproduct.html', menu_categories=categories, product="")
+            return render_template('newproduct.html', pagetitle="Add a new Product", menu_categories=categories, product="")
 
     if request.method == 'POST':
         if (request.form['prodid']):
@@ -282,15 +287,18 @@ def api(api=None):
         # check if api key is a valid user
         user = session.query(dbsetup.Users).filter_by(apikey=apikey).all()
         try:
-            if (user[0]):
+            if user[0]:
                 createdby = user[0].uid
                 if api == "getProducts":
                     # items = session.query(Products).all()
-                    items = session.query(dbsetup.Products).filter_by(created_by=createdby).order_by(asc(dbsetup.Products.id))
+                    items = session.query(dbsetup.Products) \
+                        .filter_by(created_by=createdby) \
+                        .order_by(asc(dbsetup.Products.id))
                     return jsonify(Products=[i.serialize for i in items])
 
                 elif api == "getCategories":
-                    items = session.query(dbsetup.Category).filter_by(created_by=createdby).all()
+                    items = session.query(dbsetup.Category) \
+                        .filter_by(created_by=createdby).all()
                     return jsonify(Categories=[i.serialize for i in items])
                 else:
                     return jsonify({"code": "404", "result": "Unknown API " + api})
@@ -307,6 +315,34 @@ def api(api=None):
 
 def as_dict(self):
     return {c.name: getattr(self, c.name) for c in self.__table__.columns}
+
+
+@app.route("/products/json")
+def allproductjson():
+    items = session.query(dbsetup.Products).order_by(asc(dbsetup.Products.id))
+    return jsonify(Products=[i.serialize for i in items])
+
+
+@app.route("/categories/json")
+def allcategoriesjson():
+    items = session.query(dbsetup.Category).order_by(asc(dbsetup.Category.id))
+    return jsonify(Category=[i.serialize for i in items])
+
+
+@app.route("/product/<int:product_id>/json")
+def oneproductjson(product_id):
+    # product_id = request.args['product_id']
+    items = session.query(dbsetup.Products) \
+        .filter_by(id=product_id) \
+        .order_by(asc(dbsetup.Products.id))
+    return jsonify(Products=[i.serialize for i in items])
+
+
+@app.route("/category/<int:category_id>/json")
+def onecategoryjson(category_id):
+    # category_id = request.args['category_id']
+    items = session.query(dbsetup.Category).filter_by(id=category_id).order_by(asc(dbsetup.Category.id))
+    return jsonify(Category=[i.serialize for i in items])
 
 
 # declaring a main function

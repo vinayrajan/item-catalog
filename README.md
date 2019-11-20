@@ -110,12 +110,15 @@ The new product requires
 4. The settings section is right now blank.
 
 #### API
-The api section are a set of functions that return JSON objects of the requested data. This requires the API Key. The api key can be found in the profile section of the logged in user. The api key works as a authentication for the user. If you have the right key you will get the data else it would return a error.
+The api section are a set of functions that return JSON objects of the requested data
 
 Api example:
-    http://localhost:5000/api/?key=[YOUR API KEY]
-    http://localhost:5000/api/getProducts?key=[YOUR API KEY]
-    http://localhost:5000/api/getCategories?key=[YOUR API KEY]
+- [GET] http://localhost:5000/categories/json
+- [GET] http://localhost:5000/products/json
+- [GET] http://localhost:5000/product/{Product-ID}/json 
+    * example: http://localhost:5000/product/1/json
+- [GET] http://localhost:5000/category/{Category-ID}/json 
+    * example: http://localhost:5000/category/1/json
     
 Thankyou
 Vinay Kumar Rajan
