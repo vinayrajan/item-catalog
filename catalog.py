@@ -40,8 +40,12 @@ conn = engine.connect()
 DBSession = sessionmaker(bind=engine)
 session = DBSession()
 
-
 # App routes
+"""
+Show Home function for the HomePage.
+"""
+
+
 @app.route('/')
 def showHome():
     title = " Welcome to Catacart."
@@ -55,10 +59,17 @@ def showHome():
                            products=products)
 
 
+"""
+Show Product function for displaying single product information.
+takes in product id as a parameter
+"""
+
+
 @app.route('/product-detail/<path:title>-<path:product_id>.html')
 def show_product(product_id, title=None):
-    global rp, cat
-    categories = session.query(dbsetup.Category)\
+    # global rp, cat
+    # rp = []
+    categories = session.query(dbsetup.Category) \
         .order_by(asc(dbsetup.Category.category))
 
     sql_product = text('select * from products where id=' + product_id)
@@ -75,10 +86,16 @@ def show_product(product_id, title=None):
                            related=cat_products)
 
 
+"""
+Show Catalog function for displaying products falling into a category.
+takes in category id as a parameter
+"""
+
+
 @app.route('/category/<path:name>-<path:category_id>.html')
 def showCatalog(category_id, name=None):
     title = name
-    categories = session.query(dbsetup.Category)\
+    categories = session.query(dbsetup.Category) \
         .order_by(asc(dbsetup.Category.category))
     cat_products = session.query(dbsetup.Products) \
         .filter(dbsetup.Products.cat == category_id) \
@@ -89,13 +106,24 @@ def showCatalog(category_id, name=None):
                            products=cat_products)
 
 
+"""
+Function for displaying login page
+"""
+
+
 @app.route('/login.html')
 def showLogin():
-    categories = session.query(dbsetup.Category)\
+    categories = session.query(dbsetup.Category) \
         .order_by(asc(dbsetup.Category.category))
     return render_template('login.html',
                            pagetitle="Login Page",
                            menu_categories=categories)
+
+
+"""
+Function to handle logins through google.
+the parameters of POST comes with a json of token and user profile info  
+"""
 
 
 @app.route('/doGLogin', methods=['GET', 'POST'])
@@ -159,6 +187,11 @@ def authorize(us):
     return x
 
 
+"""
+Function to handle logout  
+"""
+
+
 @app.route("/logout.html")
 def logout():
     user_session.pop('is_user', None)
@@ -167,6 +200,11 @@ def logout():
 
 
 # restricted to logged in users
+"""
+Function to handle user profile page  
+needs the user session 
+"""
+
 
 @app.route("/profile.html", methods=['GET', 'POST'])
 @authorize
@@ -178,6 +216,11 @@ def show_profile():
     return render_template('profile.html',
                            pagetitle="Profile and Help",
                            menu_categories=categories, user=user_detail)
+
+
+"""
+Function to manage the categories as an administrator   
+"""
 
 
 @app.route("/managecategories.html", methods=['GET', 'POST', 'PUT', 'DELETE'])
@@ -233,6 +276,11 @@ def manage_categories():
         return "updated"
 
 
+"""
+Function to products the categories as an administrator   
+"""
+
+
 @app.route("/manageproducts.html", methods=['GET', 'DELETE'])
 @authorize
 def manage_products():
@@ -261,6 +309,11 @@ def manage_products():
         session.delete(delete_this_row)
         session.commit()
         return "The Product called " + product_title + " is Deleted"
+
+
+"""
+Function to  add a new product as an administrator   
+"""
 
 
 @app.route("/newproduct.html", methods=['GET', 'POST'])
@@ -307,8 +360,8 @@ def newProduct(product_id=None, name=None):
             session.add(edit_this_row)
             session.commit()
 
-            categories = session.query(dbsetup.Category) \
-                .order_by(asc(dbsetup.Category.category))
+            # categories = session.query(dbsetup.Category) \
+            #     .order_by(asc(dbsetup.Category.category))
             flash("The Product " + product_title + " has been updated")
             return redirect(url_for('manage_products'))
 
@@ -335,16 +388,31 @@ def as_dict(self):
     return {c.name: getattr(self, c.name) for c in self.__table__.columns}
 
 
+"""
+API Function to  get all the products  
+"""
+
+
 @app.route("/products/json")
 def all_product_json():
     items = session.query(dbsetup.Products).order_by(asc(dbsetup.Products.id))
     return jsonify(Products=[i.serialize for i in items])
 
 
+"""
+API Function to  get all the categories  
+"""
+
+
 @app.route("/categories/json")
 def all_categories_json():
     items = session.query(dbsetup.Category).order_by(asc(dbsetup.Category.id))
     return jsonify(Category=[i.serialize for i in items])
+
+
+"""
+API Function to  get a single product  
+"""
 
 
 @app.route("/product/<int:product_id>/json")
@@ -354,6 +422,11 @@ def one_product_json(product_id):
         .filter_by(id=product_id) \
         .order_by(asc(dbsetup.Products.id))
     return jsonify(Products=[i.serialize for i in items])
+
+
+"""
+API Function to  get a single category  
+"""
 
 
 @app.route("/category/<int:category_id>/json")
