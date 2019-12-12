@@ -1,6 +1,6 @@
 {% include "header.html" %}
 
-<h3 class="h3">Products <span class="pull-right"><a href="{{ url_for('newProduct') }}" class="btn btn-success btn-sm"><i class="fa fa-pencil"></i>&nbsp;Add New</a></span></h3> 
+<h3 class="h3">Products <span class="pull-right"><a href="{{ url_for('newProduct') }}" class="btn btn-success btn-sm"><i class="fa fa-pencil"></i>&nbsp;Add New</a></span></h3>
 {% with messages = get_flashed_messages() %}
   {% if messages %}
    
@@ -43,7 +43,7 @@
                 <td><img src="{{ p[0].pic1 }}" class="img-thumbnail" style="max-width: 100px;"></td>
                 <td><img src="{{ p[0].pic2 }}" class="img-thumbnail" style="max-width: 100px;" ></td>
                 <td>
-                   <a data-toggle="tooltip" title="Edit this Product " type="button" class="btne btn btn-primary btn-sm" href="http://localhost:5000/editProduct/{{ p[0].title | urlencode }}-{{ p[0].id }}.html"><i class="fa fa-pencil"></i></a>
+                   <a data-toggle="tooltip" title="Edit this Product " type="button" class="btne btn btn-primary btn-sm" href="/editProduct/{{p[0].title}}-{{p[0].id}}.html"><i class="fa fa-pencil"></i></a>
                    <button data-toggle="tooltip" title="Delete this Product " type="button" class="btnd btn btn-danger btn-sm" data-id="{{p[0].id}}" data-name="{{p[0].title}}"><i class="fa fa-trash"></i> </button>
                 </td>        
             </tr>
@@ -65,7 +65,7 @@ $(function () {
         var id=$(this).data('id');
         var name=$(this).data('name'); 
 
-        var url="{{ url_for('manageProducts') }}";
+        var url="{{ url_for('manage_products') }}";
        yesno=confirm("Are you sure to delete this product : "+ name);
        if(yesno== true){
         $.ajax({

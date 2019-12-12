@@ -17,19 +17,19 @@
                             <span class="product-new-label">Sale</span>
                             <span class="product-discount-label">20%</span>
                         </div>
-                        <ul class="rating">{{ p.rating }}
+                        <!--<ul class="rating">{{ p.rating }}
                             <li class="fa fa-star"></li>
                             <li class="fa fa-star"></li>
                             <li class="fa fa-star"></li>
                             <li class="fa fa-star"></li>
                             <li class="fa fa-star disable"></li>
-                        </ul>
+                        </ul>-->
                         <div class="product-content">
                             <h3 class="title"><a href="#">{{ p.title }}</a></h3>
                             <div class="price">${{ p.price }}
                                 <span>${{ p.price }}</span>
                             </div>
-                            <a class="add-to-cart" href="{{url_for('showProduct', title=p.title, prod_id=p.id)}}">View this Product</a>
+                            <a class="add-to-cart" href="{{url_for('show_product', title=p.title, product_id=p.id)}}">View this Product</a>
                         </div>
                     </div>
                 </div>

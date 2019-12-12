@@ -21,7 +21,7 @@
             <li>Price: ${{ product.price }}</li>
             <li>Discount: 20%</li>
             <li>Quantity: 20 peices</li>
-            <li>Ratings: {{ product.rating }}</li>
+            <!--<li>Ratings: {{ product.rating }}</li>-->
         </ul>
         </div>
 
@@ -33,12 +33,12 @@
   <div class="row">
     {% for r in related %}
         <div class="col-md-3 col-sm-6 mb-4">
-        <a href="{{url_for('showProduct', title=r.title, prod_id=r.id)}}">
+        <a href="{{url_for('show_product', title=r.title, product_id=r.id)}}">
             <img class="img-fluid" src="{{r.pic1}}" alt="">
         </a>
         {{r.title}}
         </div>
-    {% endfor %}        
+    {% endfor %}
   </div>
     {% endif %}
 

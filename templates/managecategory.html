@@ -54,7 +54,7 @@
 <hr>
 <h3 class="h3">New Category </h3> 
 <div id="newcat" class="row">
-    <form method="POST" action="{{url_for('manageCategories')}}" class="needs-validation" novalidate>
+    <form method="POST" action="{{url_for('manage_categories')}}" class="needs-validation" novalidate>
         <div class="form-group">
             <label for="catname">Category Name</label>
             <input type="text" class="form-control" id="catname" name="catname" aria-describedby="catname" placeholder="Name your Category" required>
@@ -79,7 +79,7 @@ $(function () {
         var id=$(this).data('id');
         var name=$(this).data('name'); 
 
-        var url="{{ url_for('manageCategories') }}";
+        var url="{{ url_for('manage_categories') }}";
        yesno=confirm("Are you sure to delete this category : "+ name);
        if(yesno== true){
         $.ajax({
@@ -101,7 +101,7 @@ $(function () {
         $("#div_"+id).toggle();
     });
     $(".updbtn").on('click',function(){
-        var url="{{ url_for('manageCategories') }}";
+        var url="{{ url_for('manage_categories') }}";
         var id=$(this).data('id');        
         var oldval=$("#input_"+id).attr('placeholder');
         var newval=$("#input_"+id).val();

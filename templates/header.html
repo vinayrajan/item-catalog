@@ -49,21 +49,21 @@
 
 
                 </ul>
-                {% if 'isuser' not in user_session and session['isuser'] != True %}
+                {% if 'is_user' not in session and session['is_user'] != True %}
                 <a id="loginbutton" type="button" class="btn btn-primary" href="{{url_for('showLogin')}}"  >
                     <i class="fa fa-sign-in" aria-hidden="true"></i>&nbsp;Login
                 </a>
                 {% endif %}
-                {% if session['isuser'] == True %}
+                {% if session['is_user'] == True %}
                 <div id="welcometext" class="col-md-6" >
                     <span class="d-inline-block">Welcome user!</span>
                     <ul class="navbar-nav mr-auto d-inline-block">
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown1" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Administration</a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <a href="{{url_for('showprofile')}}" class="dropdown-item"><i class="fa fa-user" aria-hidden="true"></i> &nbsp; Profile</a>
-                            <a href="{{url_for('manageCategories')}}" class="dropdown-item"><i class="fa fa-sitemap" aria-hidden="true"></i> &nbsp; Manage Category</a>
-                            <a href="{{url_for('manageProducts')}}" class="dropdown-item"><i class="fa fa-product-hunt" aria-hidden="true"></i> &nbsp; Manage Products</a>
+                            <a href="{{url_for('show_profile')}}" class="dropdown-item"><i class="fa fa-user" aria-hidden="true"></i> &nbsp; Profile</a>
+                            <a href="{{url_for('manage_categories')}}" class="dropdown-item"><i class="fa fa-sitemap" aria-hidden="true"></i> &nbsp; Manage Category</a>
+                            <a href="{{url_for('manage_products')}}" class="dropdown-item"><i class="fa fa-product-hunt" aria-hidden="true"></i> &nbsp; Manage Products</a>
                             <div class="dropdown-divider"></div>
                             <a class="dropdown-item" href="{{url_for('logout')}}"><i class="fa fa-sign-out" aria-hidden="true"></i> &nbsp; Logout</a>
                         </div>
