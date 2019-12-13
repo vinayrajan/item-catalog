@@ -16,6 +16,7 @@ from flask import render_template, \
 from flask import session as user_session
 from sqlalchemy import asc, desc, text
 from sqlalchemy.orm import sessionmaker
+from sqlalchemy.orm.exc import NoResultFound
 
 import dbsetup
 
@@ -396,7 +397,12 @@ API Function to  get all the products
 @app.route("/products/json")
 def all_product_json():
     items = session.query(dbsetup.Products).order_by(asc(dbsetup.Products.id))
-    return jsonify(Products=[i.serialize for i in items])
+    # return jsonify(Products=[i.serialize for i in items])
+    products = [i.serialize for i in items]
+    if len(products) > 0:
+        return jsonify(products)
+    else:
+        return jsonify({404: "No category found"})
 
 
 """
@@ -407,8 +413,12 @@ API Function to  get all the categories
 @app.route("/categories/json")
 def all_categories_json():
     items = session.query(dbsetup.Category).order_by(asc(dbsetup.Category.id))
-    return jsonify(Category=[i.serialize for i in items])
-
+    # return jsonify(Category=[i.serialize for i in items])]
+    category = [i.serialize for i in items]
+    if len(category) > 0:
+        return jsonify(category)
+    else:
+        return jsonify({404: "No category found"})
 
 """
 API Function to  get a single product  
@@ -421,7 +431,12 @@ def one_product_json(product_id):
     items = session.query(dbsetup.Products) \
         .filter_by(id=product_id) \
         .order_by(asc(dbsetup.Products.id))
-    return jsonify(Products=[i.serialize for i in items])
+
+    products = [i.serialize for i in items]
+    if len(products) > 0:
+        return jsonify(products)
+    else:
+        return jsonify({404: "No products found"})
 
 
 """
@@ -434,7 +449,14 @@ def one_category_json(category_id):
     # category_id = request.args['category_id']
     items = session.query(dbsetup.Category).filter_by(id=category_id) \
         .order_by(asc(dbsetup.Category.id))
-    return jsonify(Category=[i.serialize for i in items])
+    # return jsonify(Category=[i.serialize for i in items])
+    category = [i.serialize for i in items]
+    if len(category) > 0:
+        return jsonify(category)
+    else:
+        return jsonify({404: "No Category found"})
+
+
 
 
 # declaring a main function
