@@ -43,14 +43,18 @@
                 <td><img src="{{ p[0].pic1 }}" class="img-thumbnail" style="max-width: 100px;"></td>
                 <td><img src="{{ p[0].pic2 }}" class="img-thumbnail" style="max-width: 100px;" ></td>
                 <td>
-                   <a data-toggle="tooltip" title="Edit this Product " type="button" class="btne btn btn-primary btn-sm" href="/editProduct/{{p[0].title}}-{{p[0].id}}.html"><i class="fa fa-pencil"></i></a>
-                   <button data-toggle="tooltip" title="Delete this Product " type="button" class="btnd btn btn-danger btn-sm" data-id="{{p[0].id}}" data-name="{{p[0].title}}"><i class="fa fa-trash"></i> </button>
+                    {% if p[0].created_by ==session['user_id']  %}
+                        <a data-toggle="tooltip" title="Edit this Product " type="button" class="btne btn btn-primary btn-sm" href="/editProduct/{{p[0].title}}-{{p[0].id}}.html"><i class="fa fa-pencil"></i></a>
+                        <button data-toggle="tooltip" title="Delete this Product " type="button" class="btnd btn btn-danger btn-sm" data-id="{{p[0].id}}" data-name="{{p[0].title}}"><i class="fa fa-trash"></i> </button>
+                    {% else %}
+                        <p class="text-muted">No actions for you</p>
+                    {% endif %}
                 </td>        
             </tr>
          {% endfor %}   
         </tbody>
     </table>
-    {% else %}
+
        <div class="text-center" style="width: 90%;">Looks like you have not added any products to your catalog, Please add new product by clicking on the add new button</div>
     {% endif %}
 
