@@ -25,7 +25,8 @@ The webpage uses the following components
 
 Log Analysis requires [Python](https://www.python.org/) v3.6+ to run.
 
-To install modules try ```pip install <module name>```
+To install modules try ```pip install <module name>``` or ```pip  install  -r  requirements.txt```
+
 
 
 If you want to setup the db with the sample data 
