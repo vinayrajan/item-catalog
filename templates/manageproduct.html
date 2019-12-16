@@ -45,9 +45,9 @@
                 <td>
                     {% if p[0].created_by ==session['user_id']  %}
                         <a data-toggle="tooltip" title="Edit this Product " type="button" class="btne btn btn-primary btn-sm" href="/editProduct/{{p[0].title}}-{{p[0].id}}.html"><i class="fa fa-pencil"></i></a>
-                        <button data-toggle="tooltip" title="Delete this Product " type="button" class="btnd btn btn-danger btn-sm" data-id="{{p[0].id}}" data-name="{{p[0].title}}"><i class="fa fa-trash"></i> </button>
+                        <button data-toggle="tooltip" title="Delete this Product " type="button" class="btnd btn btn-danger btn-sm" data-created_by="{{p[0].created_by}}" data-id="{{p[0].id}}" data-name="{{p[0].title}}"><i class="fa fa-trash"></i> </button>
                     {% else %}
-                        <p class="text-muted">No actions for you</p>
+                        <p class="text-muted">You are not authorized to edit this item</p>
                     {% endif %}
                 </td>        
             </tr>
@@ -67,14 +67,15 @@ $(function () {
 
     $(".btnd").on('click',function(){
         var id=$(this).data('id');
-        var name=$(this).data('name'); 
+        var name=$(this).data('name');
+        var created_by=$(this).data('created_by');
 
         var url="{{ url_for('manage_products') }}";
        yesno=confirm("Are you sure to delete this product : "+ name);
        if(yesno== true){
         $.ajax({
             url:url,
-            data: { prodtitle: name, prodid: id },
+            data: { prodtitle: name, prodid: id ,created_by:created_by},
             method:"DELETE", 
             success:function(data){ 
                 alert(data);

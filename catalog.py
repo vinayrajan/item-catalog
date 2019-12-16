@@ -215,13 +215,23 @@ needs the user session
 @app.route("/profile.html", methods=['GET', 'POST'])
 @authorize
 def show_profile():
-    user_detail = session.query(dbsetup.Users) \
-        .filter_by(uid=user_session['user_id']).one()
+    user_detail = user_info()
     categories = session.query(dbsetup.Category) \
         .order_by(asc(dbsetup.Category.category))
     return render_template('profile.html',
                            pagetitle="Profile and Help",
                            menu_categories=categories, user=user_detail)
+
+
+"""
+Function to get the details of user who has logged in
+"""
+
+
+def user_info():
+    user_detail = session.query(dbsetup.Users) \
+        .filter_by(uid=user_session['user_id']).one()
+    return user_detail
 
 
 """
@@ -257,29 +267,39 @@ def manage_categories():
     if request.method == 'DELETE':
         category_id = request.form['id']
         category_name = request.form['catname']
+        created_by = request.form['created_by']
+        # need to check if the category_id belongs to the user id on the
+        # session
 
-        delete_this_row = session.query(dbsetup.Category) \
-            .filter_by(id=category_id).one()
-        session.delete(delete_this_row)
-        session.commit()
+        if created_by == user_session['user_id']:
 
-        categories = session.query(dbsetup.Category) \
-            .order_by(asc(dbsetup.Category.category))
-        # flash("The Category called "+ category_name + " is Deleted")
-        # return redirect(url_for('manageCategories'))
-        return "The Category called " + category_name + " is Deleted"
+            delete_this_row = session.query(dbsetup.Category) \
+                .filter_by(id=category_id).one()
+            session.delete(delete_this_row)
+            session.commit()
+
+            categories = session.query(dbsetup.Category) \
+                .order_by(asc(dbsetup.Category.category))
+            return "The Category called " + category_name + " is Deleted"
+        else:
+            return "You are not authorized to delete this item"
 
     if request.method == 'PUT':
         product_id = request.form['id']
         category_name = request.form['catname']
         created_by = request.form['created_by']
 
-        edit_this_row = session.query(dbsetup.Category) \
-            .filter_by(id=product_id).one()
-        edit_this_row.category = category_name
-        session.add(edit_this_row)
-        session.commit()
-        return "updated"
+        # need to check if the category_id belongs to the user id on the
+        # session
+        if created_by == user_session['user_id']:
+            edit_this_row = session.query(dbsetup.Category) \
+                .filter_by(id=product_id).one()
+            edit_this_row.category = category_name
+            session.add(edit_this_row)
+            session.commit()
+            return "updated"
+        else:
+            return "You are not authorized to edit this item"
 
 
 """
@@ -299,7 +319,7 @@ def manage_products():
             .order_by(asc(dbsetup.Products.id))
         # .filter_by(created_by=user_session['user_id']) \
 
-        print(products)
+        # print(products)
 
         return render_template('manageproduct.html',
                                pagetitle="Manage Products",
@@ -309,12 +329,16 @@ def manage_products():
     if request.method == 'DELETE':
         product_id = request.form['prodid']
         product_title = request.form['prodtitle']
+        created_by = request.form['created_by']
 
-        delete_this_row = session.query(dbsetup.Products) \
-            .filter_by(id=product_id).one()
-        session.delete(delete_this_row)
-        session.commit()
-        return "The Product called " + product_title + " is Deleted"
+        if created_by == user_session['user_id']:
+            delete_this_row = session.query(dbsetup.Products) \
+                .filter_by(id=product_id).one()
+            session.delete(delete_this_row)
+            session.commit()
+            return "The Product called " + product_title + " is Deleted"
+        else:
+            return "You are not authorized to edit this item"
 
 
 """
@@ -349,27 +373,28 @@ def newProduct(product_id=None, name=None):
     if request.method == 'POST':
         if request.form['prodid']:
 
-            product_id = request.form['prodid']
-            product_title = request.form['prodtitle']
-            edit_this_row = session.query(dbsetup.Products) \
-                .filter_by(id=product_id).one()
+            if request.form['createdby'] == user_session['user_id']:
+                product_id = request.form['prodid']
+                product_title = request.form['prodtitle']
+                edit_this_row = session.query(dbsetup.Products) \
+                    .filter_by(id=product_id).one()
 
-            edit_this_row.title = request.form['prodtitle']
-            edit_this_row.description = request.form['proddesc']
-            edit_this_row.price = request.form['prodprice']
-            edit_this_row.pic1 = request.form['prodpic1']
-            edit_this_row.pic2 = request.form['prodpic2']
-            edit_this_row.cat = request.form['prodcat']
-            edit_this_row.created_by = request.form['createdby']
-            edit_this_row.created_on = date.today()
+                edit_this_row.title = request.form['prodtitle']
+                edit_this_row.description = request.form['proddesc']
+                edit_this_row.price = request.form['prodprice']
+                edit_this_row.pic1 = request.form['prodpic1']
+                edit_this_row.pic2 = request.form['prodpic2']
+                edit_this_row.cat = request.form['prodcat']
+                edit_this_row.created_by = request.form['createdby']
+                edit_this_row.created_on = date.today()
 
-            session.add(edit_this_row)
-            session.commit()
-
-            # categories = session.query(dbsetup.Category) \
-            #     .order_by(asc(dbsetup.Category.category))
-            flash("The Product " + product_title + " has been updated")
-            return redirect(url_for('manage_products'))
+                session.add(edit_this_row)
+                session.commit()
+                flash("The Product " + product_title + " has been updated")
+                return redirect(url_for('manage_products'))
+            else:
+                flash("You are not authorized to edit this item")
+                return redirect(url_for('manage_products'))
 
         else:
             new_product = dbsetup.Products(
