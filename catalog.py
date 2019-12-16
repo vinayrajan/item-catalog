@@ -34,8 +34,13 @@ CLIENT_ID = json.loads(
     open('client_secrets.json', 'r').read())['web']['client_id']
 
 # Database connection
-engine = dbsetup.create_engine('sqlite:///itemcatalog.db',
-                               connect_args={'check_same_thread': False})
+engine = dbsetup.create_engine(
+    'sqlite:///itemcatalog.db',
+    connect_args={
+        'check_same_thread': False})
+
+# engine = dbsetup.create_engine(
+#    'postgresql://catalog:password@localhost/catalog')
 conn = engine.connect()
 # Base.metadata.bind = engine
 DBSession = sessionmaker(bind=engine)
@@ -123,7 +128,7 @@ def showLogin():
 
 """
 Function to handle logins through google.
-the parameters of POST comes with a json of token and user profile info  
+the parameters of POST comes with a json of token and user profile info
 """
 
 
@@ -141,7 +146,7 @@ def doGLogin():
 
             api_key = ''.join(random.choice(
                 string.ascii_uppercase + string.digits)
-                              for x in range(32))
+                for x in range(32))
             now = datetime.now()
             dt_string = now.strftime("%Y-%b-%d %H:%M:%S")
 
@@ -189,7 +194,7 @@ def authorize(us):
 
 
 """
-Function to handle logout  
+Function to handle logout
 """
 
 
@@ -202,8 +207,8 @@ def logout():
 
 # restricted to logged in users
 """
-Function to handle user profile page  
-needs the user session 
+Function to handle user profile page
+needs the user session
 """
 
 
@@ -220,7 +225,7 @@ def show_profile():
 
 
 """
-Function to manage the categories as an administrator   
+Function to manage the categories as an administrator
 """
 
 
@@ -278,7 +283,7 @@ def manage_categories():
 
 
 """
-Function to products the categories as an administrator   
+Function to products the categories as an administrator
 """
 
 
@@ -313,7 +318,7 @@ def manage_products():
 
 
 """
-Function to  add a new product as an administrator   
+Function to  add a new product as an administrator
 """
 
 
@@ -390,7 +395,7 @@ def as_dict(self):
 
 
 """
-API Function to  get all the products  
+API Function to  get all the products
 """
 
 
@@ -406,7 +411,7 @@ def all_product_json():
 
 
 """
-API Function to  get all the categories  
+API Function to  get all the categories
 """
 
 
@@ -420,8 +425,9 @@ def all_categories_json():
     else:
         return jsonify({404: "No category found"})
 
+
 """
-API Function to  get a single product  
+API Function to  get a single product
 """
 
 
@@ -440,7 +446,7 @@ def one_product_json(product_id):
 
 
 """
-API Function to  get a single category  
+API Function to  get a single category
 """
 
 
@@ -455,8 +461,6 @@ def one_category_json(category_id):
         return jsonify(category)
     else:
         return jsonify({404: "No Category found"})
-
-
 
 
 # declaring a main function
