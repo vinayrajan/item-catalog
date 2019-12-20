@@ -82,11 +82,11 @@ class Products(Base):
         }
 
 
-engine = create_engine(
-    'sqlite:///itemcatalog.db',
-    connect_args={
-        'check_same_thread': False})
-# engine = create_engine('postgresql://catalog:password@localhost/catalog')
+# engine = create_engine(
+#     'sqlite:///itemcatalog.db',
+#     connect_args={
+#        'check_same_thread': False})
+engine = create_engine('postgresql://catalog:password@localhost/catalog')
 Base.metadata.create_all(engine)
 
 print("Database created, to load sample data run `python sampledata.py`!")

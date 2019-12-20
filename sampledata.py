@@ -5,8 +5,8 @@ from sqlalchemy.orm import sessionmaker
 
 from dbsetup import Base, Products, Category, Users
 
-engine = create_engine('sqlite:///itemcatalog.db')
-# engine = create_engine('postgresql://catalog:password@localhost/catalog')
+# engine = create_engine('sqlite:///itemcatalog.db')
+engine = create_engine('postgresql://catalog:password@localhost/catalog')
 Base.metadata.bind = engine
 
 DBSession = sessionmaker(bind=engine)
@@ -57,7 +57,7 @@ prod_objects = [
         pic1="http://bestjquery.com/tutorial/product-grid/demo9/images/img-1.jpg",
         pic2="http://bestjquery.com/tutorial/product-grid/demo9/images/img-2.jpg",
         cat="2",
-        rating="4.5",
+        rating="4",
         is_active="1",
         created_by="0",
         created_on="2019/10/10"),
@@ -79,7 +79,7 @@ prod_objects = [
         pic1="http://bestjquery.com/tutorial/product-grid/demo9/images/img-5.jpg",
         pic2="http://bestjquery.com/tutorial/product-grid/demo9/images/img-6.jpg",
         cat="1",
-        rating="3.2",
+        rating="3",
         is_active="1",
         created_by="0",
         created_on="2019/10/10"),
